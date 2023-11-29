@@ -1,4 +1,4 @@
-export {initialCards, createCard, delCard};
+export {initialCards, createCard, delCard };
 const initialCards = [
     {
       name: "Архыз",
@@ -40,7 +40,7 @@ const placesList = document.querySelector('.places__list');
 
 // @todo: Функция создания карточки
 
-function createCard(el, delCard) {
+function createCard(el, delCard, likedCard) {
   const cardElement = cardTemlate.querySelector('.card').cloneNode(true);
     cardElement.querySelector('.card__image').setAttribute('src', el.link);
     cardElement.querySelector('.card__image').setAttribute('alt', el.name);
@@ -48,6 +48,11 @@ function createCard(el, delCard) {
 
   const btnDel = cardElement.querySelector('.card__delete-button');
     btnDel.addEventListener('click', delCard);
+
+  const btnLike = cardElement.querySelector('.card__like-button'); 
+    btnLike.addEventListener('click', function(evt) {
+      evt.target.classList.toggle('card__like-button_is-active');
+    });
 
   return cardElement;
 }
@@ -65,4 +70,6 @@ initialCards.forEach(function (cardElement) {
   const card = createCard(cardElement, delCard);
   placesList.append(card);
 });
+
+
 
