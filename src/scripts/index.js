@@ -1,7 +1,6 @@
 import { initialCards, createCard, delCard, likeCard } from "./cards.js";
 import { openPopup, closePopup } from "./modal.js";
 import "../pages/index.css";
-export {};
 
 const placesList = document.querySelector(".places__list");
 
@@ -16,6 +15,8 @@ const btnAddNewPlace = document.querySelector(".profile__add-button");
 const editForm = document.forms["edit-profile"];
 const profileName = document.querySelector(".profile__title");
 const profileDesc = document.querySelector(".profile__description");
+const profileNameInput = editForm.elements.name;
+const profileDescinput = editForm.elements.description;
 
 const newPlaceForm = document.forms["new-place"];
 const newPlaceName = newPlaceForm.elements["place-name"];
@@ -33,14 +34,36 @@ popups.forEach(function (popup) {
 });
 
 btnEditProfile.addEventListener("click", () => {
+  profileNameInput.value = profileName.textContent;
+  profileDescinput.value = profileDesc.textContent;
   openPopup(popupEdit);
-  editForm.name.value = profileName.textContent;
-  editForm.description.value = profileDesc.textContent;
 });
 
+editForm.addEventListener("submit", (evt) => {
+  profileName.textContent = profileNameInput.value;
+  profileDesc.textContent = profileDescinput.value;
+  handleFormSubmit(evt);
+});
+
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+  closePopup(evt.target.closest(".popup"));
+}
+
 btnAddNewPlace.addEventListener("click", () => {
+  newPlaceForm.reset();
   openPopup(popupNewCard);
-  console.log("edfv");
+});
+
+newPlaceForm.addEventListener("submit", (evt) => {
+  const addedCard = createCard(
+    { name: newPlaceName.value, link: newPlaceLink.value },
+    delCard,
+    likeCard,
+    openPopup
+  );
+  placesList.prepend(addedCard);
+  handleFormSubmit(evt);
 });
 
 initialCards.forEach(function (cardElement) {

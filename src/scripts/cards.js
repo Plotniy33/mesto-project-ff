@@ -50,7 +50,6 @@ function createCard(el, delCard, likeCard, openCard) {
   btnLike.addEventListener("click", likeCard);
 
   cardImage.addEventListener("click", () => {
-    console.log("sdjhuv");
     popupPic.src = cardImage.src;
     popupPic.alt = cardImage.alt;
     popupCaption.textContent = cardDescription.textContent;
