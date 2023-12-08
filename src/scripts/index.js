@@ -1,8 +1,13 @@
 export { cardTemlate };
 
-import { createCard, delCard, likeCard } from "./card.js";
+import { createCard, delCard, likeCard, openCard } from "./card.js";
 import { initialCards } from "./cards.js";
-import { openPopup, closePopup, closePopupEvt } from "./modal.js";
+import {
+  openPopup,
+  closePopup,
+  closePopupByClick,
+  closePopupByEsc,
+} from "./modal.js";
 import "../pages/index.css";
 
 const cardTemlate = document.querySelector("#card-template").content;
@@ -28,7 +33,8 @@ const newPlaceName = newPlaceForm.elements["place-name"];
 const newPlaceLink = newPlaceForm.elements.link;
 
 popups.forEach(function (popup) {
-  popup.addEventListener("click", closePopupEvt);
+  popup.addEventListener("click", closePopupByClick);
+  popup.addEventListener("click", closePopupByEsc);
 });
 
 btnEditProfile.addEventListener("click", () => {
@@ -65,6 +71,6 @@ newPlaceForm.addEventListener("submit", (evt) => {
 });
 
 initialCards.forEach(function (cardElement) {
-  const newCard = createCard(cardElement, delCard, likeCard, openPopup);
+  const newCard = createCard(cardElement, delCard, likeCard, openCard);
   placesList.append(newCard);
 });

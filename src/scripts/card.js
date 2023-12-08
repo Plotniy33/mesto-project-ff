@@ -1,11 +1,19 @@
-export { createCard, delCard, likeCard };
+export { createCard, delCard, likeCard, openCard };
 import { cardTemlate } from "./index.js";
+import { openPopup } from "./modal.js";
 
 const popupImg = document.querySelector(".popup_type_image");
 const popupPic = popupImg.querySelector(".popup__image");
 const popupCaption = popupImg.querySelector(".popup__caption");
 
-function createCard(el, delCard, likeCard, callback) {
+function openCard(card) {
+  popupPic.src = card.link;
+  popupPic.alt = card.name;
+  popupCaption.textContent = card.name;
+  openPopup(popupImg);
+}
+
+function createCard(el, delCard, likeCard, openCard) {
   const cardElement = cardTemlate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const cardDescription = cardElement.querySelector(".card__title");
@@ -21,10 +29,7 @@ function createCard(el, delCard, likeCard, callback) {
   btnLike.addEventListener("click", likeCard);
 
   cardImage.addEventListener("click", function () {
-    popupPic.src = cardImage.src;
-    popupPic.alt = cardImage.alt;
-    popupCaption.textContent = cardDescription.textContent;
-    callback(popupImg);
+    openCard(el);
   });
 
   return cardElement;
