@@ -1,6 +1,6 @@
 export { cardTemlate };
 
-import { createCard, delCard, likeCard, openCard } from "./card.js";
+import { createCard, delCard, likeCard } from "./card.js";
 import { initialCards } from "./cards.js";
 import {
   openPopup,
@@ -15,6 +15,10 @@ const cardTemlate = document.querySelector("#card-template").content;
 const placesList = document.querySelector(".places__list");
 
 const popups = document.querySelectorAll(".popup");
+
+const popupImg = document.querySelector(".popup_type_image");
+const popupPic = popupImg.querySelector(".popup__image");
+const popupCaption = popupImg.querySelector(".popup__caption");
 
 const popupEdit = document.querySelector(".popup_type_edit");
 const popupNewCard = document.querySelector(".popup_type_new-card");
@@ -36,6 +40,13 @@ popups.forEach(function (popup) {
   popup.addEventListener("click", closePopupByClick);
   popup.addEventListener("click", closePopupByEsc);
 });
+
+function openCard(card) {
+  popupPic.src = card.link;
+  popupPic.alt = card.name;
+  popupCaption.textContent = card.name;
+  openPopup(popupImg);
+}
 
 btnEditProfile.addEventListener("click", () => {
   profileNameInput.value = profileName.textContent;
@@ -64,7 +75,7 @@ newPlaceForm.addEventListener("submit", (evt) => {
     { name: newPlaceName.value, link: newPlaceLink.value },
     delCard,
     likeCard,
-    openPopup
+    openCard
   );
   placesList.prepend(addedCard);
   handleFormSubmit(evt);
