@@ -1,5 +1,6 @@
 export { cardTemlate };
 
+import { enableValidation, clearVlidation } from "./validation.js";
 import { createCard, delCard, likeCard } from "./card.js";
 import { initialCards } from "./cards.js";
 import {
@@ -36,6 +37,19 @@ const newPlaceForm = document.forms["new-place"];
 const newPlaceName = newPlaceForm.elements["place-name"];
 const newPlaceLink = newPlaceForm.elements.link;
 
+
+
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+enableValidation(validationConfig);
+
+
 popups.forEach(function (popup) {
   popup.addEventListener("click", closePopupByClick);
   popup.addEventListener("click", closePopupByEsc);
@@ -52,6 +66,7 @@ btnEditProfile.addEventListener("click", () => {
   profileNameInput.value = profileName.textContent;
   profileDescinput.value = profileDesc.textContent;
   openPopup(popupEdit);
+  clearVlidation(popupEdit, validationConfig);
 });
 
 editForm.addEventListener("submit", (evt) => {
@@ -68,6 +83,7 @@ function handleFormSubmit(evt) {
 btnAddNewPlace.addEventListener("click", () => {
   newPlaceForm.reset();
   openPopup(popupNewCard);
+  clearVlidation(newPlaceForm, validationConfig);
 });
 
 newPlaceForm.addEventListener("submit", (evt) => {
@@ -85,3 +101,7 @@ initialCards.forEach(function (cardElement) {
   const newCard = createCard(cardElement, delCard, likeCard, openCard);
   placesList.append(newCard);
 });
+
+
+
+

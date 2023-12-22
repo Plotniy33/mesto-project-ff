@@ -1,7 +1,7 @@
 export { openPopup, closePopup, closePopupByClick, closePopupByEsc };
 
 function openPopup(popup) {
-  popup.classList.add("popup_is-animated", "popup_is-opened");
+  popup.classList.add("popup_is-opened", "popup_is-animated");
   document.addEventListener("keydown", closePopupByClick);
   document.addEventListener("keydown", closePopupByEsc);
 }

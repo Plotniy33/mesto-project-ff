@@ -1,0 +1,13 @@
+.form__input-error {
+    font-size: 12px;
+    color: #FF0000;
+    
+}
+
+.popup__error_visible {
+    display: block;
+} 
+
+.form__input-error:last-of-type {
+    margin-block-start: 10px;
+} 
