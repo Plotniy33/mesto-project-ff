@@ -1,4 +1,5 @@
 export { createCard, delCard, likeCard };
+
 import { cardTemplate } from "./index.js";
 import { putLike, delLike, delCardUser } from "./api.js";
 

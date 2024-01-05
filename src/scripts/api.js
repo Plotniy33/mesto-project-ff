@@ -24,21 +24,18 @@ const testResponse = (res) => {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 };
-console.log("check");
 
 const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   }).then((res) => testResponse(res));
 };
-console.log("card");
 
 const getUserInfo = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   }).then((res) => testResponse(res));
 };
-console.log("user");
 
 const editUserInfo = (userName, userAbout) => {
   return fetch(`${config.baseUrl}/users/me`, {
