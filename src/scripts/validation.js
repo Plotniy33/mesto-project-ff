@@ -1,7 +1,5 @@
 export { enableValidation, clearVlidation };
 
-
-
 const showInputError = (
   formElement,
   inputElement,
@@ -119,4 +117,3 @@ const clearVlidation = (formElement, validationConfig) => {
     inputElement.setCustomValidity("");
   });
 };
-
