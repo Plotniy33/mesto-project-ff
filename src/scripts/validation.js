@@ -1,5 +1,3 @@
-export { enableValidation, clearVlidation };
-
 const showInputError = (
   formElement,
   inputElement,
@@ -46,6 +44,7 @@ const setEventListeners = (formElement, validationConfig) => {
     validationConfig.submitButtonSelector
   );
   toggleButtonState(inputList, buttonElement, validationConfig);
+  
   inputList.forEach(function (inputElement) {
     inputElement.addEventListener("input", function () {
       isValid(formElement, inputElement, validationConfig);
@@ -90,6 +89,7 @@ const clearVlidation = (formElement, validationConfig) => {
     validationConfig.submitButtonSelector
   );
   buttonElement.classList.add(validationConfig.inactiveButtonClass);
+  buttonElement.disabled = true;
   inputList.forEach((inputElement) => {
     hideInputError(
       formElement,
@@ -99,3 +99,5 @@ const clearVlidation = (formElement, validationConfig) => {
     inputElement.setCustomValidity("");
   });
 };
+
+export { enableValidation, clearVlidation };

@@ -1,5 +1,3 @@
-export { createCard, delCard, likeCard };
-
 import { cardTemplate } from "./index.js";
 import { putLike, delLike, delCardUser } from "./api.js";
 
@@ -26,7 +24,7 @@ function createCard(el, userId, delCard, likeCard, openCard) {
 
   const btnLike = cardElement.querySelector(".card__like-button");
   btnLike.addEventListener("click", (evt) => {
-    likeCard(evt, el._id, cardElement);
+    likeCard(evt, el._id, cardLikeCounter);
   });
 
   const liked = el.likes.some((like) => like._id === userId);
@@ -51,13 +49,12 @@ function delCard(cardId, cardElement) {
     });
 }
 
-function likeCard(evt, cardId, cardElement) {
-  const cardLikedCounter = cardElement.querySelector(".card__like-counter");
+function likeCard(evt, cardId, cardLikeCounter) {
   if (evt.target.classList.contains("card__like-button_is-active")) {
     delLike(cardId)
       .then((card) => {
         evt.target.classList.remove("card__like-button_is-active");
-        cardLikedCounter.textContent = card.likes.length;
+        cardLikeCounter.textContent = card.likes.length;
       })
       .catch((err) => {
         console.error(`Ошибка: ${err}`);
@@ -66,10 +63,12 @@ function likeCard(evt, cardId, cardElement) {
     putLike(cardId)
       .then((card) => {
         evt.target.classList.add("card__like-button_is-active");
-        cardLikedCounter.textContent = card.likes.length;
+        cardLikeCounter.textContent = card.likes.length;
       })
       .catch((err) => {
         console.error(`Ошибка: ${err}`);
       });
   }
 }
+
+export { createCard, delCard, likeCard };

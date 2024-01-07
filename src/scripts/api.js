@@ -1,14 +1,3 @@
-export {
-  getInitialCards,
-  getUserInfo,
-  editUserInfo,
-  addingNewCard,
-  putLike,
-  delLike,
-  delCardUser,
-  updateUserAvatar,
-};
-
 const config = {
   baseUrl: "https://mesto.nomoreparties.co/v1/wff-cohort-3",
   headers: {
@@ -25,65 +14,80 @@ const testResponse = (res) => {
   }
 };
 
+function request(url, options) {
+  return fetch(`${config.baseUrl}` + url, options).then(testResponse);
+}
+
 const getInitialCards = () => {
-  return fetch(`${config.baseUrl}/cards`, {
+  return request("/cards", {
     headers: config.headers,
-  }).then((res) => testResponse(res));
+  });
 };
 
 const getUserInfo = () => {
-  return fetch(`${config.baseUrl}/users/me`, {
+  return request("/users/me", {
     headers: config.headers,
-  }).then((res) => testResponse(res));
+  });
 };
 
 const editUserInfo = (userName, userAbout) => {
-  return fetch(`${config.baseUrl}/users/me`, {
+  return request("/users/me", {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
       name: userName,
       about: userAbout,
     }),
-  }).then((res) => testResponse(res));
+  });
 };
 
-const addingNewCard = (placeName, placeLink) => {
-  return fetch(`${config.baseUrl}/cards`, {
+const addNewCard = (placeName, placeLink) => {
+  return request("/cards", {
     method: "POST",
     headers: config.headers,
     body: JSON.stringify({
       name: placeName,
       link: placeLink,
     }),
-  }).then((res) => testResponse(res));
+  });
 };
 
 const putLike = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+  return request(`/cards/likes/${cardId}`, {
     method: "PUT",
     headers: config.headers,
-  }).then((res) => testResponse(res));
+  });
 };
 
 const delLike = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+  return request(`/cards/likes/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  }).then((res) => testResponse(res));
+  });
 };
 
 const delCardUser = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+  return request(`/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  }).then((res) => testResponse(res));
+  });
 };
 
 const updateUserAvatar = (avaLink) => {
-  return fetch(`${config.baseUrl}/users/me/avatar`, {
+  return request("/users/me/avatar", {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({ avatar: avaLink }),
-  }).then((res) => testResponse(res));
+  });
+};
+
+export {
+  getInitialCards,
+  getUserInfo,
+  editUserInfo,
+  addNewCard,
+  putLike,
+  delLike,
+  delCardUser,
+  updateUserAvatar,
 };

@@ -1,10 +1,33 @@
-export { cardTemplate };
+import {
+  cardTemplate,
+  placesList,
+  profileAva,
+  popupEditProfileAva,
+  editAvaForm,
+  avaFormInput,
+  popupImg,
+  popupPic,
+  popupCaption,
+  btnEditProfile,
+  popupEdit,
+  editForm,
+  profileName,
+  profileDesc,
+  profileNameInput,
+  profileDescinput,
+  btnAddNewPlace,
+  popupNewCard,
+  newPlaceForm,
+  newPlaceName,
+  newPlaceLink,
+  validationConfig
+} from "./constants.js";
 
 import {
   getInitialCards,
   getUserInfo,
   editUserInfo,
-  addingNewCard,
+  addNewCard,
   updateUserAvatar,
 } from "./api.js";
 import { enableValidation, clearVlidation } from "./validation.js";
@@ -15,57 +38,18 @@ import {
   closePopupByClick,
   closePopupByEsc,
 } from "./modal.js";
+import { changeButtonText } from "./utils.js"
 import "../pages/index.css";
 
-const cardTemplate = document.querySelector("#card-template").content;
-
-const placesList = document.querySelector(".places__list");
-
-const popups = document.querySelectorAll(".popup");
-
-const profileAva = document.querySelector(".profile__image");
-const popupEditProfileAva = document.querySelector(".popup_type_edit-avatar");
-const editAvaForm = popupEditProfileAva.querySelector(".popup__form");
-const avaFormInput = editAvaForm.querySelector(".popup__input_type_url");
-const btnEditAva = editAvaForm.querySelector(".popup__button");
-
-const popupImg = document.querySelector(".popup_type_image");
-const popupPic = popupImg.querySelector(".popup__image");
-const popupCaption = popupImg.querySelector(".popup__caption");
-
-const btnEditProfile = document.querySelector(".profile__edit-button");
-const popupEdit = document.querySelector(".popup_type_edit");
-const editForm = document.forms["edit-profile"];
-const profileName = document.querySelector(".profile__title");
-const profileDesc = document.querySelector(".profile__description");
-const btnSaveProfileEdit = editForm.querySelector(".popup__button");
-const profileNameInput = editForm.elements.name;
-const profileDescinput = editForm.elements.description;
-
-const btnAddNewPlace = document.querySelector(".profile__add-button");
-const popupNewCard = document.querySelector(".popup_type_new-card");
-const newPlaceForm = document.forms["new-place"];
-const newPlaceName = newPlaceForm.elements["place-name"];
-const btnNewPlaceAdd = newPlaceForm.querySelector(".popup__button");
-const newPlaceLink = newPlaceForm.elements.link;
-
-const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-};
 
 let userId;
 
 enableValidation(validationConfig);
 
-popups.forEach(function (popup) {
-  popup.addEventListener("click", closePopupByClick);
-  popup.addEventListener("click", closePopupByEsc);
-});
+// popups.forEach(function (popup) {
+//   popup.addEventListener("click", closePopupByClick);
+//   popup.addEventListener("click", closePopupByEsc);
+// });
 
 function openCard(card) {
   popupPic.src = card.link;
@@ -74,6 +58,7 @@ function openCard(card) {
   openPopup(popupImg);
 }
 
+
 btnEditProfile.addEventListener("click", () => {
   profileNameInput.value = profileName.textContent;
   profileDescinput.value = profileDesc.textContent;
@@ -81,24 +66,25 @@ btnEditProfile.addEventListener("click", () => {
   clearVlidation(popupEdit, validationConfig);
 });
 
-editForm.addEventListener("submit", submitProfileForm);
-
 function submitProfileForm(evt) {
   evt.preventDefault();
-  loading(true, btnSaveProfileEdit);
+  changeButtonText(true, evt.submitter);
   editUserInfo(profileNameInput.value, profileDescinput.value)
     .then((data) => {
       profileName.textContent = data.name;
       profileDesc.textContent = data.about;
-      closePopup(evt.target.closest(".popup"));
+      closePopup(popupEdit);
     })
     .catch((err) => {
       console.error(`Ошибка: ${err}`);
     })
     .finally(() => {
-      loading(false, btnSaveProfileEdit);
+      changeButtonText(false, evt.submitter);
     });
 }
+
+editForm.addEventListener("submit", submitProfileForm);
+
 
 btnAddNewPlace.addEventListener("click", () => {
   newPlaceForm.reset();
@@ -106,24 +92,25 @@ btnAddNewPlace.addEventListener("click", () => {
   clearVlidation(newPlaceForm, validationConfig);
 });
 
-newPlaceForm.addEventListener("submit", addingCardUser);
-
-function addingCardUser(evt) {
+function submitCardUser(evt) {
   evt.preventDefault();
-  loading(true, btnNewPlaceAdd);
-  addingNewCard(newPlaceName.value, newPlaceLink.value)
+  changeButtonText(true, evt.submitter);
+  addNewCard(newPlaceName.value, newPlaceLink.value)
     .then((data) => {
       const addedCard = createCard(data, userId, delCard, likeCard, openCard);
       placesList.prepend(addedCard);
-      closePopup(evt.target.closest(".popup"));
+      closePopup(popupNewCard);
     })
     .catch((err) => {
       console.error(`Ошибка: ${err}`);
     })
     .finally(() => {
-      loading(false, btnNewPlaceAdd);
+      changeButtonText(false, evt.submitter);
     });
 }
+
+newPlaceForm.addEventListener("submit", submitCardUser);
+
 
 profileAva.addEventListener("click", () => {
   editAvaForm.reset();
@@ -131,23 +118,24 @@ profileAva.addEventListener("click", () => {
   clearVlidation(editAvaForm, validationConfig);
 });
 
-editAvaForm.addEventListener("submit", submitAvaForm);
-
 function submitAvaForm(evt) {
   evt.preventDefault();
-  loading(true, btnEditAva);
+  changeButtonText(true, evt.submitter);
   updateUserAvatar(avaFormInput.value)
     .then((data) => {
       profileAva.style.backgroundImage = `url('${data.avatar}')`;
-      closePopup(evt.target.closest(".popup"));
+      closePopup(popupEditProfileAva);
     })
     .catch((err) => {
       console.error(`Ошибка: ${err}`);
     })
     .finally(() => {
-      loading(false, btnEditAva);
+      changeButtonText(false, evt.submitter);
     });
 }
+
+editAvaForm.addEventListener("submit", submitAvaForm);
+
 
 Promise.all([getInitialCards(), getUserInfo()])
   .then(([cardsData, profileData]) => {
@@ -171,6 +159,5 @@ Promise.all([getInitialCards(), getUserInfo()])
     console.error(`Ошибка: ${err}`);
   });
 
-const loading = (isLoading, button) => {
-  button.textContent = isLoading ? "Сохранение..." : "Сохранить";
-};
+
+export { cardTemplate };
